@@ -3,4 +3,9 @@
 <% provide(:url, user_path(@user)) %>
 <h1>Settings</h1>
 
+<%= image_tag @user.avatar.url, class: "avatar"%>
+<%= form_for @user, :html => { :multipart => true } do |f| %>
+    <%= f.file_field :avatar %>
+    <%= f.submit 'Save avatar', class: "btn btn-primary" %>
+<% end %>
 <%= render 'form', user: @user %>

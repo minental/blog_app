@@ -1,9 +1,5 @@
-<p>
-  <strong>Name:</strong>
-  <%= @user.name %>
-</p>
-
-<p>
-  <strong>Email:</strong>
-  <%= @user.email %>
-</p>
+<% provide(:title, "#{@user.name} | Blog App") %>
+<span>
+  <%= image_tag @user.avatar.url, class: "avatar"%>
+  <h1><%= @user.name %></h1>
+</span>
