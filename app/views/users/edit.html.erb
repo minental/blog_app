@@ -1,6 +1,6 @@
-<h1>Editing User</h1>
+<% provide(:title, 'Settings') %>
+<% provide(:button_text, 'Save') %>
+<% provide(:url, user_path(@user)) %>
+<h1>Settings</h1>
 
 <%= render 'form', user: @user %>
-
-<%= link_to 'Show', @user %> |
-<%= link_to 'Back', users_path %>
