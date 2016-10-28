@@ -1,5 +1,5 @@
-<% if logged_in? %>
-  <%= render 'static/home_logged_in' %>
-<% else %>
-  <%= render 'static/home_base' %>
-<% end %>
+<% provide(:title, 'Blog App') %>
+<div class="center">
+  <h1>Welcome to the Blog App</h1>
+  <%= link_to "Sign up", signup_path, class: "btn btn-lg btn-primary" %>
+</div>

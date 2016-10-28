@@ -1,5 +1,21 @@
 <% provide(:title, "#{@user.name} | Blog App") %>
-<span>
+<div class="col-md-4">
   <%= image_tag @user.avatar.url, class: "avatar"%>
-  <h1><%= @user.name %></h1>
-</span>
+  <h1>
+    <%= @user.name %>
+  </h1>
+  <% if current_user?(@user) %>
+  <div class="post_form">
+        <%= render 'shared/post_form' %>
+  </div>
+  <% end %>
+</div>
+<div class="col-md-8">
+  <% if @user.posts.any? %>
+    <h2>Posts (<%= @user.posts.count %>)</h2>
+    <ul class="posts">
+      <%= render @posts %>
+    </ul>
+    <%= will_paginate @posts %>
+  <% end %>
+</div>

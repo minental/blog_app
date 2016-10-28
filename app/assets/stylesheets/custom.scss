@@ -15,6 +15,10 @@ body {
 .field {
   margin-top: 10px;
   margin-bottom: 10px;
+  textarea {
+    width: 300px;
+    height: 150px;
+  }
 }
 
 .btn {
@@ -31,4 +35,13 @@ img {
 
 ul {
   list-style: none;
+}
+
+.posts {
+  list-style: none;
+  padding: 0;
+  li {
+    padding: 10px 0;
+    border-top: 1px solid #e8e8e8;
+  }
 }

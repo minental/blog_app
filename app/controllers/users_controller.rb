@@ -9,6 +9,8 @@ class UsersController < ApplicationController
 
   # GET /users/1
   def show
+    @post = Post.new
+    @posts = @user.posts.paginate(page: params[:page])
   end
 
   # GET /users/new
