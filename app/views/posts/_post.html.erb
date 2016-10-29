@@ -1,5 +1,5 @@
 <li>
-  <%= image_tag @user.avatar.url(:small), class: "avatar"%>
+  <%= image_tag post.user.avatar.url(:small), class: "avatar"%>
   <span><%= link_to post.user.name, post.user %></span>
   <p><%= post.content %></p>
   <p>
