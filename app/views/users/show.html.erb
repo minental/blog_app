@@ -1,5 +1,6 @@
 <% provide(:title, "#{@user.name} | Blog App") %>
 <% provide(:button_text, 'Post') %>
+<% provide(:placeholder_text, 'Compose new post...') %>
 <div class="col-md-4">
   <%= render 'shared/user_info' %>
   <% if current_user?(@user) %>
@@ -10,7 +11,6 @@
 </div>
 <div class="col-md-8">
   <% if @user.posts.any? %>
-    <h2>Posts <%= @user.posts.count %></h2>
     <ul class="posts">
       <%= render @posts %>
     </ul>

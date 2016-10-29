@@ -1,6 +1,7 @@
-<%= form_for(@post) do |f| %>
+<%= form_for(@created_comment) do |f| %>
   <div class="field">
     <%= f.text_area :content, placeholder: yield(:placeholder_text) %>
+    <%= f.hidden_field :commented_id, value: @post.id %>
   </div>
   <%= f.submit yield(:button_text), class: "btn btn-primary" %>
 <% end %>

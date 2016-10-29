@@ -1,0 +1,19 @@
+<% provide(:title, 'Blog App') %>
+<% provide(:button_text, 'Comment') %>
+<% provide(:placeholder_text, 'Compose new comment...') %>
+<div class="col-md-4">
+  <%= render 'posts/post', post: @post %>
+  <% if logged_in? %>
+  <div class="post_form">
+        <%= render 'shared/comment_form' %>
+  </div>
+  <% end %>
+</div>
+<div class="col-md-8">
+  <% if @comments.any? %>
+    <ul class="posts">
+      <%= render @comments %>
+    </ul>
+    <%= will_paginate @comments %>
+  <% end %>
+</div>

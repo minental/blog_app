@@ -10,7 +10,12 @@ class PostsController < ApplicationController
     else
       flash[:danger] = @post.errors.full_messages.first
     end
-    redirect_to current_user
+    redirect_to @post.is_comment? ? post_path(@post.commented_id) : current_user
+  end
+
+  def show
+    @comments = @post.comments.paginate(page: params[:page])
+    @created_comment = Post.new
   end
 
   def edit
@@ -19,7 +24,7 @@ class PostsController < ApplicationController
   def update
     if @post.update_attributes(post_params)
       flash[:success] = "Post updated"
-      redirect_to @user
+      redirect_to @post
     else
       render 'edit'
     end
@@ -27,8 +32,11 @@ class PostsController < ApplicationController
 
   def destroy
     @post.destroy
-    flash[:success] = "Post deleted"
-    redirect_to current_user
+    flash.now[:success] = "Post deleted"
+    respond_to do |format|
+      format.html { redirect_to current_user }
+      format.js
+    end
   end
 
   private
@@ -39,7 +47,7 @@ class PostsController < ApplicationController
     end
 
     def post_params
-      params.require(:post).permit(:content)
+      params.require(:post).permit(:content, :commented_id)
     end
 
     def correct_user
