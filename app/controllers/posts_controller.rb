@@ -1,21 +1,27 @@
 class PostsController < ApplicationController
-  before_action :set_post_and_user, only: [:show, :edit, :update]
-  before_action :logged_in?, only: [:create, :destroy, :edit, :update]
-  before_action :correct_user, only: [:edit, :update, :destroy]
+  load_and_authorize_resource
+  before_action :set_user, only: [:show, :edit, :update]
+  #before_action :logged_in?, only: [:create, :destroy, :edit, :update]
+  #before_action :correct_user, only: [:edit, :update, :destroy]
 
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
       flash[:success] = "Post created!"
+      redirect_to posts_path
     else
       flash[:danger] = @post.errors.full_messages.first
+      redirect_to current_user
     end
-    redirect_to @post.is_comment? ? post_path(@post.commented_id) : current_user
   end
 
   def show
     @comments = @post.comments.paginate(page: params[:page])
-    @created_comment = Post.new
+    @comment = Comment.new
+  end
+
+  def index
+    @posts= Post.paginate(page: params[:page])
   end
 
   def edit
@@ -24,7 +30,7 @@ class PostsController < ApplicationController
   def update
     if @post.update_attributes(post_params)
       flash[:success] = "Post updated"
-      redirect_to @post
+      redirect_to posts_path
     else
       render 'edit'
     end
@@ -34,20 +40,19 @@ class PostsController < ApplicationController
     @post.destroy
     flash.now[:success] = "Post deleted"
     respond_to do |format|
-      format.html { redirect_to current_user }
+      format.html { redirect_to posts_path }
       format.js
     end
   end
 
   private
 
-    def set_post_and_user
-      @post = Post.find(params[:id])
+    def set_user
       @user = @post.user
     end
 
     def post_params
-      params.require(:post).permit(:content, :commented_id)
+      params.require(:post).permit(:title, :content, :picture)
     end
 
     def correct_user

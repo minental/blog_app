@@ -1,0 +1,13 @@
+<li>
+  <%= image_tag comment.post.user.avatar.url(:small), class: "avatar"%>
+  <span><%= link_to comment.post.user.name, comment.post.user %></span>
+  <p><%= comment.content %></p>
+  <p>
+    Posted <%= time_ago_in_words(comment.created_at) %> ago.
+  </p>
+  <%= link_to "edit", edit_post_comment_path(@post, comment) if can? :update, comment %>
+  <%= link_to "delete", post_comment_path(@post, comment), method: :delete,
+                                                             data: { confirm: "You sure?" },
+                                                           remote: true,
+                                                            class: 'delete_comment' if can? :destroy, comment %>
+</li>

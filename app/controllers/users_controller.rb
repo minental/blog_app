@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action :correct_user,   only: [:edit, :update, :destroy]
+  load_and_authorize_resource
+  #before_action :set_user, only: [:show, :edit, :update, :destroy]
+  #before_action :correct_user,   only: [:edit, :update, :destroy]
 
   # GET /users
   def index
@@ -10,7 +11,7 @@ class UsersController < ApplicationController
   # GET /users/1
   def show
     @post = Post.new
-    @posts = @user.posts.where(commented_id: nil).paginate(page: params[:page])
+    @posts = @user.posts.paginate(page: params[:page])
   end
 
   # GET /users/new

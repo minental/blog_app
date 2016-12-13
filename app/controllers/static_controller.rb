@@ -1,6 +1,6 @@
 class StaticController < ApplicationController
 
   def home
-    redirect_to current_user if logged_in?
+    redirect_to posts_path if logged_in?
   end
 end

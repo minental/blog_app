@@ -1,0 +1,6 @@
+<% provide(:title, 'Edit comment') %>
+<% provide(:button_text, 'Save') %>
+<h1>Edit comment</h1>
+
+<%= render 'shared/errors', object: @comment %>
+<%= render 'shared/comment_form', post: @comment %>

@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  extend Enumerize
   has_many :posts, dependent: :destroy
   before_save   :downcase_email
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
@@ -10,6 +11,7 @@ class User < ApplicationRecord
   validates :password, presence: true, length: { minimum: 6 }, allow_nil: true
   mount_uploader :avatar, PictureUploader
   validate :avatar_size
+  enumerize :role, in: { guest: 0, user: 1, admin: 2 }, default: :user
 
   private
 
