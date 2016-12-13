@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
   def new
+    redirect_to root_url unless current_user.nil?
   end
 
   def create
