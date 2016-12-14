@@ -10,13 +10,13 @@ FactoryGirl.define do
   end
 
   factory :post do
-    title "post1"
-    content "post1"
+    sequence(:title) { |n| "title#{n}" }
+    sequence(:content) { |n| "post#{n}" }
     user
   end
 
   factory :comment do
-    content "comment1"
+    sequence(:content) { |n| "comment#{n}" }
     post
   end
 end
