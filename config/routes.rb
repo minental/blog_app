@@ -7,8 +7,8 @@ Rails.application.routes.draw do
   post   '/login',      to: 'sessions#create'
   delete '/logout',     to: 'sessions#destroy'
 
-  resources :users,      only: [:index, :edit, :update, :show, :destroy]
-  resources :posts,      only: [:index, :create, :show, :edit, :update, :destroy] do
-    resources :comments,   only: [:create, :edit, :update, :destroy]
+  resources :users,      except: [:new, :create]
+  resources :posts,      except: [:new] do
+    resources :comments, except: [:new, :index, :show]
   end
 end
