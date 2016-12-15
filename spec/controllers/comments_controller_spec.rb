@@ -2,7 +2,10 @@ require 'rails_helper'
 
 RSpec.describe CommentsController, type: :controller do
   let!(:comment) { create(:comment) }
-  let!(:commented_post) { comment.post }
+  let!(:commented_post) do
+    comment.post.update_attributes(approved: true)
+    comment.post
+  end
   let!(:comment_author) { commented_post.user }
   let!(:user) { create(:user) }
   let!(:admin) { create(:user, :admin) }

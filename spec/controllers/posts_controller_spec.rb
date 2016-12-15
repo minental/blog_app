@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe PostsController, type: :controller do
   let!(:created_post) { create(:post) }
+  let!(:approved_post) { create(:post, approved: true) }
   let!(:post_owner) { created_post.user }
   let!(:user) { create(:user) }
   let!(:admin) { create(:user, :admin) }
@@ -14,9 +15,36 @@ RSpec.describe PostsController, type: :controller do
   end
 
   describe "GET #show" do
-    it "renders the :show view" do
-      get :show, { params: { id: created_post.id } }
-      expect(response).to render_template :show
+    context "as not admin" do
+      context "post is approved" do
+        it "renders the :show view for" do
+          get :show, { params: { id: approved_post.id } }
+          expect(response).to render_template :show
+        end
+      end
+      context "post is not approved" do
+        it "redirects to root" do
+          get :show, { params: { id: created_post.id } }
+          expect(response).to redirect_to root_url
+        end
+      end
+    end
+    context "as admin" do
+      before do
+        log_in admin
+      end
+      context "post is approved" do
+        it "renders the :show view for" do
+          get :show, { params: { id: approved_post.id } }
+          expect(response).to render_template :show
+        end
+      end
+      context "post is not approved" do
+        it "renders the :show view for" do
+          get :show, { params: { id: created_post.id } }
+          expect(response).to render_template :show
+        end
+      end
     end
   end
 
@@ -82,34 +110,79 @@ RSpec.describe PostsController, type: :controller do
   describe "PATCH #update" do
     let(:updated_title) { "updated-title" }
 
+    let(:update_title_request) { patch :update, { params: { id: created_post.id, post: { title: updated_title } } } }
+    let(:update_approve_request) { patch :update, { params: { id: created_post.id, post: { approved: true } } } }
+
+    let(:expect_title_was_updated) { expect(created_post.reload.title).to eq(updated_title) }
+    let(:expect_title_was_not_updated) { expect(created_post.reload.title).to_not eq(updated_title) }
+
+    let(:expect_post_was_approved) { expect(created_post.reload.approved).to be true }
+    let(:expect_post_was_not_approved) { expect(created_post.reload.approved).to be false }
+
     context "user is guest" do
-      it "should not update post" do
-        patch :update, { params: { id: created_post.id, post: { title: updated_title } } }
-        expect(created_post.reload.title).to_not eq(updated_title)
+      context "attempt to update title" do
+        it "should not update title" do
+          update_title_request
+          expect_title_was_not_updated
+        end
       end
+      context "attempt to approve post" do
+        it "should not approve post" do
+          update_approve_request
+          expect_post_was_not_approved
+        end
+      end
+
     end
 
     context "user is not post author" do
-      it "should not update user" do
-        log_in user
-        patch :update, { params: { id: created_post.id, post: { title: updated_title } } }
-        expect(created_post.reload.title).to_not eq(updated_title)
+      context "attempt to update title" do
+        it "should not update title" do
+          log_in user
+          update_title_request
+          expect_title_was_not_updated
+        end
+      end
+      context "attempt to approve post" do
+        it "should not approve post" do
+          log_in user
+          update_approve_request
+          expect_post_was_not_approved
+        end
       end
     end
 
     context "user is post author" do
-      it "should update user" do
-        log_in post_owner
-        patch :update, { params: { id: created_post.id, post: { title: updated_title } } }
-        expect(created_post.reload.title).to eq(updated_title)
+      context "attempt to update title" do
+        it "should update title" do
+          log_in post_owner
+          update_title_request
+          expect_title_was_updated
+        end
+      end
+      context "attempt to approve post" do
+        it "should not approve post" do
+          log_in post_owner
+          update_approve_request
+          expect_post_was_not_approved
+        end
       end
     end
 
     context "user is admin" do
-      it "should update user" do
-        log_in admin
-        patch :update, { params: { id: created_post.id, post: { title: updated_title } } }
-        expect(created_post.reload.title).to eq(updated_title)
+      context "attempt to update title" do
+        it "should update title" do
+          log_in admin
+          update_title_request
+          expect_title_was_updated
+        end
+      end
+      context "attempt to approve post" do
+        it "should approve post" do
+          log_in admin
+          update_approve_request
+          expect_post_was_approved
+        end
       end
     end
   end

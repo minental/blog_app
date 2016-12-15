@@ -4,5 +4,11 @@
   <%= f.text_area :content, placeholder: yield(:placeholder_text) %>
   </div>
   <%= f.file_field :picture %>
+  <% if (can?(:approve, @post)) %>
+    <div>
+      <%= f.label "Approved", class: "checkbox inline" %>
+      <%= f.check_box :approved%>
+    </div>
+  <% end %>
   <%= f.submit yield(:button_text), class: "btn btn-primary" %>
 <% end %>

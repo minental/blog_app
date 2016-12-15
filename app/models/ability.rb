@@ -8,14 +8,17 @@ class Ability
 
     if user.role.admin?
       can :manage, :all
+      can :approve, Post
     elsif user.role.user?
       can :read, :all
       can :create, [Post, Comment]
       can [:update, :destroy], Post, user_id: user.id
       can [:update, :destroy], User, id: user.id
+      cannot :read, Post, approved: false
     elsif user.role.guest?
       can :create, User
       can :read, :all
+      cannot :read, Post, approved: false
     end
 
     # The first argument to `can` is the action you are giving the user

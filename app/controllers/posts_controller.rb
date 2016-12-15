@@ -21,13 +21,17 @@ class PostsController < ApplicationController
   end
 
   def index
-    @posts= Post.paginate(page: params[:page])
+    unapproved = params[:unapproved]
+    @posts = unapproved ?
+        Post.unapproved.paginate(page: params[:page]) :
+        Post.approved.paginate(page: params[:page])
   end
 
   def edit
   end
 
   def update
+    authorize! :approve, current_user if params[:post][:approved]
     if @post.update_attributes(post_params)
       flash[:success] = "Post updated"
       redirect_to posts_path
@@ -52,11 +56,15 @@ class PostsController < ApplicationController
     end
 
     def post_params
-      params.require(:post).permit(:title, :content, :picture)
+      params.require(:post).permit(:title, :content, :picture, :approved)
     end
 
     def correct_user
       @post = current_user.posts.find_by(id: params[:id])
       redirect_to root_url if @post.nil?
+    end
+
+    def posts_for(user)
+
     end
 end
