@@ -40,6 +40,10 @@ RSpec.describe UsersController, type: :controller do
         post :create, { params: { user: attributes_for(:user) } }
         expect(current_user).to eq(User.last)
       end
+      it 'should send a greeting email' do
+        expect { post :create,
+                      { params: { user: attributes_for(:user) } } }.to change(ActionMailer::Base.deliveries, :count).by(1)
+      end
     end
 
     context "user is admin" do
