@@ -11,4 +11,5 @@ Rails.application.routes.draw do
   resources :posts,      except: [:new], constraints: { id: /\d+/ } do
     resources :comments, except: [:new, :index, :show], constraints: { id: /\d+/ }
   end
+  resources :password_resets, only: [:new, :create, :edit, :update]
 end

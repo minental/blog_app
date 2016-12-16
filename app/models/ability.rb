@@ -15,9 +15,11 @@ class Ability
       can [:update, :destroy], Post, user_id: user.id
       can [:update, :destroy], User, id: user.id
       cannot :read, Post, approved: false
+      cannot :reset_password
     elsif user.role.guest?
       can :create, User
       can :read, :all
+      can :reset_password
       cannot :read, Post, approved: false
     end
 

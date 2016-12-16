@@ -1,0 +1,19 @@
+<% provide(:title, 'Sign up') %>
+
+<div class="row">
+  <div class="center">
+    <h1>Password reset</h1>
+    <%= form_for(@user, url: "/password_resets", method: "post") do |f| %>
+        <%= render 'shared/errors', object: f.object %>
+
+        <div class="field">
+          <%= f.label :email %>
+          <%= f.text_field :email %>
+        </div>
+
+        <div class="actions">
+          <%= f.submit "Submit", class: "btn btn-primary" %>
+        </div>
+    <% end %>
+  </div>
+</div>

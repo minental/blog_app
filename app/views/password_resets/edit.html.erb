@@ -1,0 +1,19 @@
+<%= form_for(@user, url: "/password_resets/#{@token}", method: "patch") do |f| %>
+    <%= render 'shared/errors', object: f.object %>
+
+    <%= f.hidden_field :email, value: @user.email %>
+
+    <div class="field">
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+    </div>
+
+    <div class="field">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit "Submit", class: "btn btn-primary" %>
+    </div>
+<% end %>
