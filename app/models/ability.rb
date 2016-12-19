@@ -8,19 +8,21 @@ class Ability
 
     if user.role.admin?
       can :manage, :all
-      can :approve, Post
     elsif user.role.user?
-      can :read, :all
+      can :read, User
+      can :read, Post, approved: true
+
       can :create, [Post, Comment]
-      can [:update, :destroy], Post, user_id: user.id
+
+      can [:update, :destroy], Post, approved: true, user_id: user.id
       can [:update, :destroy], User, id: user.id
-      cannot :read, Post, approved: false
-      cannot :reset_password
     elsif user.role.guest?
+      can :read, User
+      can :read, Post, approved: true
+
       can :create, User
-      can :read, :all
+
       can :reset_password
-      cannot :read, Post, approved: false
     end
 
     # The first argument to `can` is the action you are giving the user

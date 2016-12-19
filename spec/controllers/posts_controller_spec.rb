@@ -1,11 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe PostsController, type: :controller do
-  let!(:created_post) { create(:post) }
-  let!(:approved_post) { create(:post, approved: true) }
+  let(:created_post) { create(:post, approved: true) }
+  let(:unapproved_post) { create(:post) }
+  let(:approved_post) { create(:post, approved: true) }
   let!(:post_owner) { created_post.user }
-  let!(:user) { create(:user) }
-  let!(:admin) { create(:user, :admin) }
+  let(:user) { create(:user) }
+  let(:admin) { create(:user, :admin) }
 
   describe "GET #index" do
     it "renders the :index view" do
@@ -24,7 +25,7 @@ RSpec.describe PostsController, type: :controller do
       end
       context "post is not approved" do
         it "redirects to root" do
-          get :show, { params: { id: created_post.id } }
+          get :show, { params: { id: unapproved_post.id } }
           expect(response).to redirect_to root_url
         end
       end
@@ -41,7 +42,7 @@ RSpec.describe PostsController, type: :controller do
       end
       context "post is not approved" do
         it "renders the :show view for" do
-          get :show, { params: { id: created_post.id } }
+          get :show, { params: { id: unapproved_post.id } }
           expect(response).to render_template :show
         end
       end
@@ -111,13 +112,13 @@ RSpec.describe PostsController, type: :controller do
     let(:updated_title) { "updated-title" }
 
     let(:update_title_request) { patch :update, { params: { id: created_post.id, post: { title: updated_title } } } }
-    let(:update_approve_request) { patch :update, { params: { id: created_post.id, post: { approved: true } } } }
+    let(:update_approve_request) { patch :update, { params: { id: unapproved_post.id, post: { approved: true } } } }
 
     let(:expect_title_was_updated) { expect(created_post.reload.title).to eq(updated_title) }
     let(:expect_title_was_not_updated) { expect(created_post.reload.title).to_not eq(updated_title) }
 
-    let(:expect_post_was_approved) { expect(created_post.reload.approved).to be true }
-    let(:expect_post_was_not_approved) { expect(created_post.reload.approved).to be false }
+    let(:expect_post_was_approved) { expect(unapproved_post.reload.approved).to be true }
+    let(:expect_post_was_not_approved) { expect(unapproved_post.reload.approved).to be false }
 
     context "user is guest" do
       context "attempt to update title" do
@@ -162,7 +163,7 @@ RSpec.describe PostsController, type: :controller do
       end
       context "attempt to approve post" do
         it "should not approve post" do
-          log_in post_owner
+          log_in unapproved_post.user
           update_approve_request
           expect_post_was_not_approved
         end

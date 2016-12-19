@@ -1,8 +1,6 @@
 class PostsController < ApplicationController
   load_and_authorize_resource
   before_action :set_user, only: [:show, :edit, :update]
-  #before_action :logged_in?, only: [:create, :destroy, :edit, :update]
-  #before_action :correct_user, only: [:edit, :update, :destroy]
 
   def create
     @post = current_user.posts.build(post_params)
@@ -21,10 +19,7 @@ class PostsController < ApplicationController
   end
 
   def index
-    unapproved = params[:unapproved]
-    @posts = unapproved ?
-        Post.unapproved.paginate(page: params[:page]) :
-        Post.approved.paginate(page: params[:page])
+    @posts = Post.all.paginate(page: params[:page])
   end
 
   def edit
@@ -57,14 +52,5 @@ class PostsController < ApplicationController
 
     def post_params
       params.require(:post).permit(:title, :content, :picture, :approved)
-    end
-
-    def correct_user
-      @post = current_user.posts.find_by(id: params[:id])
-      redirect_to root_url if @post.nil?
-    end
-
-    def posts_for(user)
-
     end
 end
