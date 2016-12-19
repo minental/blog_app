@@ -1,0 +1,4 @@
+$('.like-btn').bind('ajax:success', function() {
+    $(this).closest('li').find('span.likes_count').text(<%= @post.likes.count %> );
+    $(this).closest('li').find('span.dislikes_count').text(<%= @post.dislikes.count %> );
+});

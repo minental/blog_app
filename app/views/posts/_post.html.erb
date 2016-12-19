@@ -7,9 +7,16 @@
   <p>
     Posted <%= time_ago_in_words(post.created_at) %> ago.
   </p>
+  <%= content_tag(:span, "unapproved") unless post.approved? %>
+  <%= content_tag(:span, post.likes.count, class: "likes_count") %>
+  <%= content_tag(:span, post.dislikes.count, class: "dislikes_count") %>
+  <p>
+    <%= link_to "Like", like_post_path(post.id), method: :post, remote: true, class: "btn-warning like-btn" if can? :like, post %>
+    <%= link_to "Dislike", dislike_post_path(post.id), method: :post, remote: true, class: "btn-danger dislike-btn" if can? :dislike, post %>
+  </p>
   <%= link_to "edit", edit_post_path(post) if can? :update, post %>
   <%= link_to "delete", post, method: :delete,
-                                data: { confirm: "You sure?" },
-                              remote: true,
-                               class: 'delete_post' if can? :destroy, post %>
+              data: { confirm: "You sure?" },
+              remote: true,
+              class: 'delete_post' if can? :destroy, post %>
 </li>

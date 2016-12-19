@@ -16,6 +16,9 @@ class Ability
 
       can [:update, :destroy], Post, approved: true, user_id: user.id
       can [:update, :destroy], User, id: user.id
+
+      can :like, Post, approved: true
+      can :dislike, Post, approved: true
     elsif user.role.guest?
       can :read, User
       can :read, Post, approved: true

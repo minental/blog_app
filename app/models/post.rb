@@ -1,13 +1,19 @@
 class Post < ApplicationRecord
   belongs_to :user
   has_many :comments, dependent: :destroy
+  has_many :votes, dependent: :destroy
   validates :user_id, presence: true
   validates :title, presence: true, length: { maximum: 40 }
   validates :content, presence: true, length: { maximum: 150 }
   mount_uploader :picture, PostPictureUploader
 
   default_scope -> { order(created_at: :desc) }
-  scope :approved, -> { where(approved: true) }
-  scope :unapproved, -> { where(approved: false) }
 
+  def likes
+    votes.where(value: 1)
+  end
+
+  def dislikes
+    votes.where(value: -1)
+  end
 end

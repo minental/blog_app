@@ -19,7 +19,7 @@ class PostsController < ApplicationController
   end
 
   def index
-    @posts = Post.all.paginate(page: params[:page])
+    @posts = @posts.paginate(page: params[:page])
   end
 
   def edit
@@ -44,10 +44,38 @@ class PostsController < ApplicationController
     end
   end
 
+  def like
+    get_vote
+    @vote.value  = 1
+    @vote.save
+    respond_to do |format|
+      format.html { redirect_to posts_path }
+      format.js
+    end
+  end
+
+  def dislike
+    get_vote
+    @vote.value  = -1
+    @vote.save
+    respond_to do |format|
+      format.html { redirect_to posts_path }
+      format.js
+    end
+  end
+
   private
 
     def set_user
       @user = @post.user
+    end
+
+    def get_vote
+      @post = Post.find(params[:id])
+      @vote = @post.votes.find_by(user_id: current_user.id)
+      unless @vote
+        @vote = Vote.create(user_id: current_user.id, post_id: @post.id)
+      end
     end
 
     def post_params

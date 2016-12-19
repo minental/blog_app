@@ -1,4 +1,7 @@
+require 'token_generation'
 class PasswordResetsController < ApplicationController
+  include TokenGeneration
+
   before_action :authorize_reset_password
   before_action :set_user, only: [:create, :edit, :update]
 

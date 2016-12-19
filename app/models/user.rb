@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   extend Enumerize
   has_many :posts, dependent: :destroy
+  has_many :votes, dependent: :destroy
   before_save   :downcase_email
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :name, presence: true, length: { maximum: 50 }

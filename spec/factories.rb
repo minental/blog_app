@@ -1,4 +1,8 @@
 FactoryGirl.define do
+  factory :vote do
+    user nil
+    post nil
+  end
   factory :user do
     sequence(:name) { |n| "user#{n}" }
     sequence(:email) { |n| "user#{n}@example.com" }
