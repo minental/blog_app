@@ -14,6 +14,10 @@ class User < ApplicationRecord
   validate :avatar_size
   enumerize :role, in: { guest: 0, user: 1, admin: 2 }, default: :user
 
+  def self.options_for_select
+    order(name: :asc).map {|r| [r.name, r.id]}
+  end
+
   private
 
     # Converts email to all lower-case.

@@ -1,4 +1,7 @@
 <%= form_for @post, :html => { :multipart => true } do |f| %>
+  <div>
+    <%= f.collection_select :category_id, Category.all, :id, :name %>
+  </div>
   <%= f.text_field :title, placeholder: yield(:placeholder_title) %>
   <div class="field">
   <%= f.text_area :content, placeholder: yield(:placeholder_text) %>

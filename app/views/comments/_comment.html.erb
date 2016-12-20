@@ -1,6 +1,4 @@
 <li>
-  <%= image_tag comment.post.user.avatar.url(:small), class: "avatar"%>
-  <span><%= link_to comment.post.user.name, comment.post.user %></span>
   <p><%= comment.content %></p>
   <p>
     Posted <%= time_ago_in_words(comment.created_at) %> ago.

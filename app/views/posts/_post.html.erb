@@ -1,15 +1,16 @@
 <li>
   <%= image_tag post.user.avatar.url(:small), class: "avatar"%>
   <span><%= link_to post.user.name, post.user %></span>
+  <h4><%= "Category: #{post.category.name}" %></h4>
   <h3><%= link_to post.title, post_path(post) %></h3>
   <p><%= post.content %></p>
   <%= image_tag post.picture.url unless post.picture.blank? %>
   <p>
     Posted <%= time_ago_in_words(post.created_at) %> ago.
+    <%= content_tag(:strong, "UNAPPROVED") unless post.approved? %>
   </p>
-  <%= content_tag(:span, "unapproved") unless post.approved? %>
-  <%= content_tag(:span, post.likes.count, class: "likes_count") %>
-  <%= content_tag(:span, post.dislikes.count, class: "dislikes_count") %>
+  <%= content_tag(:span, post.likes.count, class: "likes_count") %> likes
+  <%= content_tag(:span, post.dislikes.count, class: "dislikes_count") %> dislikes
   <p>
     <%= link_to "Like", like_post_path(post.id), method: :post, remote: true, class: "btn-warning like-btn" if can? :like, post %>
     <%= link_to "Dislike", dislike_post_path(post.id), method: :post, remote: true, class: "btn-danger dislike-btn" if can? :dislike, post %>

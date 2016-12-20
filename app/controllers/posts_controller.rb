@@ -1,16 +1,16 @@
 class PostsController < ApplicationController
   load_and_authorize_resource
   before_action :set_user, only: [:show, :edit, :update]
+  before_action :get_vote, only: [:like, :dislike]
 
   def create
     @post = current_user.posts.build(post_params)
     if @post.save
       flash[:success] = "Post created!"
-      redirect_to posts_path
     else
       flash[:danger] = @post.errors.full_messages.first
-      redirect_to current_user
     end
+    redirect_to posts_path
   end
 
   def show
@@ -19,7 +19,30 @@ class PostsController < ApplicationController
   end
 
   def index
-    @posts = @posts.paginate(page: params[:page])
+    @post = Post.new
+
+    @filterrific = initialize_filterrific(
+        Post,
+        params[:filterrific],
+        select_options: {
+            with_category_id: Category.options_for_select,
+            with_user_id: User.options_for_select,
+            with_approval: [['Approved', true], ['Unapproved', false]]
+        }
+    ) or return
+
+    @posts = @filterrific.find
+
+    unless current_user && current_user.role.admin?
+      @posts = @posts.where(approved: true)
+    end
+
+    @posts = @posts.page(params[:page])
+
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   def edit
@@ -45,8 +68,7 @@ class PostsController < ApplicationController
   end
 
   def like
-    get_vote
-    @vote.value  = 1
+    @vote.value = 1
     @vote.save
     respond_to do |format|
       format.html { redirect_to posts_path }
@@ -55,8 +77,7 @@ class PostsController < ApplicationController
   end
 
   def dislike
-    get_vote
-    @vote.value  = -1
+    @vote.value =-1
     @vote.save
     respond_to do |format|
       format.html { redirect_to posts_path }
@@ -73,12 +94,10 @@ class PostsController < ApplicationController
     def get_vote
       @post = Post.find(params[:id])
       @vote = @post.votes.find_by(user_id: current_user.id)
-      unless @vote
-        @vote = Vote.create(user_id: current_user.id, post_id: @post.id)
-      end
+      @vote = Vote.create(user_id: current_user.id, post_id: @post.id) unless @vote
     end
 
     def post_params
-      params.require(:post).permit(:title, :content, :picture, :approved)
+      params.require(:post).permit(:title, :content, :picture, :approved, :category_id)
     end
 end

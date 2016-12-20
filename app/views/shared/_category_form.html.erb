@@ -1,0 +1,6 @@
+<%= form_for @category do |f| %>
+    <div>
+      <%= f.text_field :name, placeholder: yield(:placeholder_text) %>
+    </div>
+    <%= f.submit yield(:button_text), class: "btn btn-primary" %>
+<% end %>

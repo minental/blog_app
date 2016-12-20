@@ -1,0 +1,30 @@
+<%= form_for_filterrific @filterrific do |f| %>
+    <% if (current_user && current_user.role.admin?) %>
+      <div class="form-group">
+        Approval
+        <%= f.select(
+              :with_approval,
+              @filterrific.select_options[:with_approval],
+              { include_blank: '- Any -' }
+          ) %>
+      </div>
+
+      <div class="form-group">
+        User
+        <%= f.select(
+              :with_user_id,
+              @filterrific.select_options[:with_user_id],
+              { include_blank: '- Any -' }
+          ) %>
+      </div>
+    <% end %>
+    <div class="form-group">
+      Category
+      <%= f.select(
+              :with_category_id,
+              @filterrific.select_options[:with_category_id],
+              { include_blank: '- Any -' }
+          ) %>
+    </div>
+    <%= link_to('Reset filters', reset_filterrific_url, class: "btn btn-default") %>
+<% end %>

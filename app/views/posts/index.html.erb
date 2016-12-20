@@ -1,11 +1,22 @@
 <% provide(:title, 'Posts') %>
+<% provide(:button_text, 'Post') %>
+<% provide(:placeholder_title, 'Compose post title...') %>
+<% provide(:placeholder_text, 'Compose new post...') %>
 
 <h1>Posts</h1>
 
-<%= will_paginate %>
+<div class="row">
+  <% if logged_in? %>
+      <div class="post_form">
+        <%= render 'shared/post_form' %>
+      </div>
+  <% end %>
 
-<ul class="posts">
-  <%= render @posts%>
-</ul>
+  <div class="text-right">
+    <%= render 'shared/filterrific_form' %>
+  </div>
+</div>
 
-<%= will_paginate %>
+<div id="filter-results">
+  <%= render partial: 'posts', locals: { posts: @posts } %>
+</div>

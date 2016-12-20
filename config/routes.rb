@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   delete '/logout',     to: 'sessions#destroy'
 
   resources :users,      except: [:new, :create], constraints: { id: /\d+/ }
+  resources :categories, except: [:new, :show]
   resources :posts,      except: [:new], constraints: { id: /\d+/ } do
     member do
       post :like

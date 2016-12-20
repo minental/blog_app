@@ -34,6 +34,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'pg', '0.18.4'
 gem 'enumerize'
 gem 'cancancan'
+gem 'filterrific'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

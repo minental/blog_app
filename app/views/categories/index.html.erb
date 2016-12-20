@@ -1,0 +1,16 @@
+<% provide(:title, 'Categories') %>
+<% provide(:placeholder_text, 'Compose new category...') %>
+<% provide(:button_text, 'Submit') %>
+
+<h1>Categories</h1>
+
+<%= render 'shared/errors', object: @category %>
+<%= render 'shared/category_form' %>
+
+<%= will_paginate %>
+
+<ul class="categories">
+  <%= render @categories %>
+</ul>
+
+<%= will_paginate %>

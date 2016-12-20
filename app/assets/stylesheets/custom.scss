@@ -46,6 +46,28 @@ ul {
   }
 }
 
+.categories {
+  list-style: none;
+  padding: 0;
+  li {
+    padding: 10px 0;
+    border-top: 1px solid #e8e8e8;
+  }
+}
+
 li {
   list-style: none;
 }
+
+.post_form {
+  width: 800px;
+  float: left;
+}
+
+.text-right {
+  float: right;
+  width: 300px;
+  height: 367px;
+}
+
+

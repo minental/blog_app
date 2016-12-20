@@ -1,0 +1,11 @@
+<li>
+  <p><%= category.name %></p>
+  <p>
+    Created <%= time_ago_in_words(category.created_at) %> ago.
+  </p>
+  <%= link_to "edit", edit_category_path(category) if can? :update, category %>
+  <%= link_to "delete", category, method: :delete,
+              data: { confirm: "You sure?" },
+              remote: true,
+              class: 'delete_category' if can? :destroy, category %>
+</li>

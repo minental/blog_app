@@ -1,8 +1,9 @@
 FactoryGirl.define do
-  factory :vote do
-    user nil
-    post nil
+
+  factory :category do
+    sequence(:name) { |n| "category#{n}" }
   end
+
   factory :user do
     sequence(:name) { |n| "user#{n}" }
     sequence(:email) { |n| "user#{n}@example.com" }
@@ -17,6 +18,7 @@ FactoryGirl.define do
     sequence(:title) { |n| "title#{n}" }
     sequence(:content) { |n| "post#{n}" }
     user
+    category
   end
 
   factory :comment do

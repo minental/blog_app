@@ -5,6 +5,7 @@ RSpec.describe PostsController, type: :controller do
   let(:unapproved_post) { create(:post) }
   let(:approved_post) { create(:post, approved: true) }
   let!(:post_owner) { created_post.user }
+  let!(:category) { created_post.category}
   let(:user) { create(:user) }
   let(:admin) { create(:user, :admin) }
 
@@ -54,7 +55,7 @@ RSpec.describe PostsController, type: :controller do
     context "user is guest" do
       it "should not create post" do
         expect{ post :create,
-                     { params: { post: attributes_for(:post) } } }.to_not change(Post, :count)
+                     { params: { post: attributes_for(:post).merge(category_id: category.id) } } }.to_not change(Post, :count)
       end
     end
 
@@ -62,7 +63,7 @@ RSpec.describe PostsController, type: :controller do
       it "should create post" do
         log_in user
         expect { post :create,
-                      { params: { post: attributes_for(:post) } }}.to change(Post, :count).by(1)
+                      { params: { post: attributes_for(:post).merge(category_id: category.id) } }}.to change(Post, :count).by(1)
       end
     end
 
@@ -70,7 +71,7 @@ RSpec.describe PostsController, type: :controller do
       it "should create post" do
         log_in admin
         expect { post :create,
-                      { params: { post: attributes_for(:post) } }}.to change(Post, :count).by(1)
+                      { params: { post: attributes_for(:post).merge(category_id: category.id) } }}.to change(Post, :count).by(1)
       end
     end
   end
