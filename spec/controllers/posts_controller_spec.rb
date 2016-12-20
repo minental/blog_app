@@ -221,4 +221,52 @@ RSpec.describe PostsController, type: :controller do
       end
     end
   end
+
+  describe "POST #like" do
+    let(:like_request) { post :like, { params: { id: created_post.id } } }
+
+    context "user is guest" do
+      it "should not like post" do
+        expect{ like_request }.to_not change(Vote, :count)
+      end
+    end
+
+    context "user is logged in" do
+      it "should like post" do
+        log_in user
+        expect{ like_request }.to change(Vote, :count).by(1)
+      end
+    end
+
+    context "user is admin" do
+      it "should like post" do
+        log_in admin
+        expect{ like_request }.to change(Vote, :count).by(1)
+      end
+    end
+  end
+
+  describe "POST #dislike" do
+    let(:dislike_request) { post :dislike, { params: { id: created_post.id } } }
+
+    context "user is guest" do
+      it "should not dislike post" do
+        expect{ dislike_request }.to_not change(Vote, :count)
+      end
+    end
+
+    context "user is logged in" do
+      it "should dislike post" do
+        log_in user
+        expect{ dislike_request }.to change(Vote, :count).by(1)
+      end
+    end
+
+    context "user is admin" do
+      it "should dislike post" do
+        log_in admin
+        expect{ dislike_request }.to change(Vote, :count).by(1)
+      end
+    end
+  end
 end
